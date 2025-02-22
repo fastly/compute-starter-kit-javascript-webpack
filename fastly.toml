@@ -2,7 +2,7 @@
 # https://developer.fastly.com/reference/fastly-toml/
 
 authors = ["<oss@fastly.com>"]
-description = "Fastly Compute starter kit for JavaScript, demonstrating Webpack for bundling。"
+description = "Fastly Compute starter kit for JavaScript, demonstrating webpack for bundling。"
 language = "javascript"
 manifest_version = 3
 name = "Default starter for JavaScript"

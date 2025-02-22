@@ -2,30 +2,30 @@
 
 [![Deploy to Fastly](https://deploy.edgecompute.app/button)](https://deploy.edgecompute.app/fastly/compute-starter-kit-javascript-webpack)
 
-Learn how to use [Webpack](https://webpack.js.org/) to bundle modules for the [Fastly Compute JavaScript environment](https://www.fastly.com/documentation/guides/compute/javascript/).
+Learn how to use [webpack](https://webpack.js.org/) to bundle modules for the [Fastly Compute JavaScript environment](https://www.fastly.com/documentation/guides/compute/javascript/).
 
 **For more details about other starter kits for Compute, see the [Fastly Documentation Hub](https://www.fastly.com/documentation/solutions/starters)**
 
 ## Features
 
-* Contains build steps configured to bundle your application using [Webpack](https://webpack.js.org/).
+* Contains build steps configured to bundle your application using [webpack](https://webpack.js.org/).
 * Provides a starting point for `webpack.config.js` for use with Fastly Compute
 
 ## Understanding the code
 
 Compute applications written in JavaScript can be compiled by the [Fastly CLI](https://www.fastly.com/documentation/reference/tools/cli/) without any bundling, but you can choose to use a module bundler if you want to replace global modules or provide polyfills.
 
-This starter kit demonstrates the use of Webpack for bundling, providing a `webpack.config.js` file that can be used as a starting point for configuring your application's specific bundling needs.
+This starter kit demonstrates the use of webpack for bundling, providing a `webpack.config.js` file that can be used as a starting point for configuring your application's specific bundling needs.
 
 For example, you may choose to add rules in the `module` section that determine how different [asset modules](https://webpack.js.org/guides/asset-modules/) will be treated. [Shimming](https://webpack.js.org/guides/shimming/) and [redirecting module requests](https://webpack.js.org/configuration/resolve/#resolvefallback) using the `plugins` or `resolve` sections are useful techniques when your code relies on Node.js built-ins, proposals, or newer standards.
 
-In any case, any Compute project that chooses to use Webpack must include the following `externals` code that allows `fastly:` imports to work correctly (pre-configured for this project):
+In any case, any Compute project that chooses to use webpack must include the following `externals` code that allows `fastly:` imports to work correctly (pre-configured for this project):
 ```javascript
 module.exports = {
 
   // ... add your webpack config here ...
 
-  // If your project uses Webpack, you MUST include this externals rule to ensure
+  // If your project uses webpack, you MUST include this externals rule to ensure
   // that "fastly:*" namespaced imports work as intended.
   externals: [
     ({request,}, callback) => {
@@ -79,7 +79,7 @@ To build and deploy your application to your Fastly account, type the following 
 npm run deploy
 ```
 
-By default, Webpack bundles source files in [`'production'` mode](https://webpack.js.org/configuration/mode/). When your bundle is built, the bundle file `bin/index.js` will be minified as an optimization. To build in development mode, specify `'development'` mode by setting the `NODE_ENV` environment variable when building the bundle. This can result in a more human-readable bundle, which may help with debugging.
+By default, webpack bundles source files in [`'production'` mode](https://webpack.js.org/configuration/mode/). When your bundle is built, the bundle file `bin/index.js` will be minified as an optimization. To build in development mode, specify `'development'` mode by setting the `NODE_ENV` environment variable when building the bundle. This can result in a more human-readable bundle, which may help with debugging.
 
 For example:
 ```shell
