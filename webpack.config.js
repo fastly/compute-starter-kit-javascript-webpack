@@ -1,35 +1,36 @@
-const path = require("path");
-const webpack = require("webpack");
-
-module.exports = {
-  entry: "./src/index.js",
-  target: "webworker",
+export default {
+  entry: './src/index.js',
+  target: false,
+  devtool: false,
   output: {
-    filename: "index.js",
-    path: path.resolve(__dirname, "bin"),
-    libraryTarget: "this",
+    filename: 'index.cjs',
+    chunkFormat: 'commonjs',
+    library: {
+      type: 'commonjs',
+    },
   },
   module: {
     rules: [
       // Loaders go here.
-      // e.g., ts-loader for TypeScript
+      // e.g., babel-loader to use Babel for transpiling code
+    ],
+  },
+  resolve: {
+    extensions: [],
+    conditionNames: [
+      'fastly',
+      '...',
     ],
   },
   plugins: [
-    // Polyfills go here.
-    // Used for, e.g., any cross-platform WHATWG,
-    // or core Node.js modules needed for your application.
+    // Webpack Plugins and Polyfills go here
+    // e.g., cross-platform WHATWG or core Node.js modules needed for your application.
     // new webpack.ProvidePlugin({
     // }),
   ],
   externals: [
-    ({request,}, callback) => {
-      // Allow webpack to handle 'fastly:*' namespaced module imports by treating
-      // them as modules rather than try to process them as URLs
-      if (/^fastly:.*$/.test(request)) {
-        return callback(null, 'commonjs ' + request);
-      }
-      callback();
-    }
+    // Allow webpack to handle 'fastly:*' namespaced module imports by treating
+    // them as modules rather than trying to process them as URLs
+    /^fastly:.*$/,
   ],
 };
