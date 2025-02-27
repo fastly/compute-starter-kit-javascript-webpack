@@ -1,5 +1,5 @@
 export default {
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   target: false,
   devtool: false,
   output: {
@@ -12,13 +12,34 @@ export default {
   module: {
     rules: [
       // Loaders go here.
-      // e.g., babel-loader to use Babel for transpiling code
+
+      // NOTE: Remove this block and the following dependencies if you do not need React and JSX
+      // @babel/core, babel-loader, @babel/preset-react, react, react-dom
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-react',
+                {
+                  runtime: 'automatic',
+                },
+              ],
+            ],
+          }
+        },
+      },
+
     ],
   },
   resolve: {
     extensions: [],
     conditionNames: [
       'fastly',
+      'edge-light', // Remove this if you do not need React
       '...',
     ],
   },
