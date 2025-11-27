@@ -12,11 +12,11 @@ Learn how to use [webpack](https://webpack.js.org/) to bundle modules for the [F
 * Provides a starting point for `webpack.config.js` for use with Fastly Compute.
 * Demonstrates the use of the webpack loader [`babel-loader`](https://babeljs.io/docs/babel-preset-react) to transpile [JSX syntax](https://facebook.github.io/jsx/) to JavaScript during bundling using [Babel](https://babel.dev/).
 
-The example source code is a JSX file and holds dependencies on `react` and `react-dom`. It demonstrates serialization of a React component into a stream, served as a synthesized response from a Compute application.
+The example source code is a JSX file and holds dependencies on `react` and `react-dom/server.edge` (this is a build of `react-dom/server` designed for edge runtimes such as Fastly Compute). It demonstrates serialization of a React component into a stream, served as a synthesized response from a Compute application.
 
 ```jsx
 import * as React from 'react';
-import * as Server from 'react-dom/server';
+import * as Server from 'react-dom/server.edge';
 
 const Greet = () => <h1>Hello, world!</h1>;
 return new Response(
@@ -50,7 +50,6 @@ At minimum, the configuration file should include the following (pre-configured 
 * `externals` - Set to `[ /^fastly:.*$/, ]`. Indicates to webpack that `fastly:` imports should be looked up as external imports rather than modules under `node_modules`.
 * `resolve.extensions` - Set to `[]`.
 * `resolve.conditionNames` - Set to `['fastly', '...']`.
-  * If you're using `react-dom`, use `['fastly', 'edge-light', '...']`.
 
 ```javascript
 export default {
@@ -69,7 +68,6 @@ export default {
     extensions: [],
     conditionNames: [
       'fastly',
-      'edge-light',
       '...',
     ],
   },
@@ -78,7 +76,7 @@ export default {
 
 Using these as a starting point, you can further customize the configuration to meet your needs. For example:
 - The [`module` section](https://webpack.js.org/configuration/module/) can be used to determine how [different types of modules](https://webpack.js.org/concepts/modules) will be treated.
-- [Shimming](https://webpack.js.org/guides/shimming/) and [redirecting module resolution](https://webpack.js.org/configuration/resolve/#resolvefallback) using the [`plugins`](https://webpack.js.org/configuration/plugins/) or [`resolve`](https://webpack.js.org/configuration/resolve/) sections are useful techniques when your code relies on Node.js built-ins, proposals, or newer standards.
+- The [`plugins` section](https://webpack.js.org/configuration/plugins/) or [`resolve` section](https://webpack.js.org/configuration/resolve/) are useful for [shimming](https://webpack.js.org/guides/shimming/) and [redirecting module resolution](https://webpack.js.org/configuration/resolve/#resolvefallback) when your code relies on Node.js built-ins, proposals, or newer standards.
 - Refer to the [webpack configuration documentation](https://webpack.js.org/configuration/) for more details.
 
 > [!TIP]
@@ -149,14 +147,7 @@ However, webpack's output format is the older [CommonJS module](https://nodejs.o
 
 ### Conditional exports
 
-The starter kit is configured to use the condition names `fastly` and `edge-light` when resolving modules ([`resolve.conditionNames`](https://webpack.js.org/configuration/resolve/#resolveconditionnames) of `webpack.config.js`). These are taken into consideration during the bundling process when webpack encounters a package that [defines conditional exports](https://nodejs.org/api/packages.html#conditional-exports).
-
-For example, the `index.jsx` file in the starter kit declares an import on `react-dom/server`:
-```js
-import Server from 'react-dom/server'; 
-```
-
-Because the condition name `edge-light` matches against one of the conditional exports listed in `react-dom`'s `package.json`, webpack resolves the package's entry point to a version of `react-dom` built for the edge.
+The starter kit is configured to use the condition names `fastly` when resolving modules ([`resolve.conditionNames`](https://webpack.js.org/configuration/resolve/#resolveconditionnames) of `webpack.config.js`). These are taken into consideration during the bundling process when webpack encounters a package that [defines conditional exports](https://nodejs.org/api/packages.html#conditional-exports).
 
 ## Running the application
 
@@ -214,8 +205,7 @@ If your application does not need React or JSX, you may remove this functionalit
               },
             },
       ```
-   4. In `webpack.config.js`, remove `'edge-light'` from the `resolve.conditionNames` array.   
-   5. Remove the following dependencies from your application:
+   4. Remove the following dependencies from your application:
       ```shell
       npm uninstall babel-loader @babel/core @babel/preset-react react react-dom
       ```

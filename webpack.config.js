@@ -39,7 +39,6 @@ export default {
     extensions: [],
     conditionNames: [
       'fastly',
-      'edge-light', // Remove this if you do not need React
       '...',
     ],
   },

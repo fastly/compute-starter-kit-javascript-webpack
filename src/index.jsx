@@ -2,7 +2,7 @@
 
 import { env } from 'fastly:env';
 import * as React from 'react';
-import * as Server from 'react-dom/server';
+import * as Server from 'react-dom/server.edge';
 
 addEventListener("fetch", (event) => event.respondWith(handleRequest(event)));
 
